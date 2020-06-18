@@ -1,0 +1,21 @@
+Trip id,Starttime,Stoptime,Bikeid,Tripduration,From station id,From station name,To station id,To station name,Usertype
+66669783,4/1/19 16:31,4/1/19 17:41,70000,4178,1047,S 22nd St & E Carson St,1046,S 25th St & E Carson St,Customer
+67181259,4/6/19 18:56,4/6/19 19:08,70000,719,49301,Centre Ave & N Craig St,1024,S Negley Ave & Baum Blvd,Subscriber
+67425370,4/8/19 16:45,4/8/19 16:50,70000,305,1024,S Negley Ave & Baum Blvd,1026,Penn Ave & S Whitfield St,Customer
+24234323,7/19/19 18:21,7/19/19 20:20,70675,7124,666,erik,666,hey,Customer
+79111323,7/20/19 18:21,7/20/19 20:20,70675,7124,666,Sara's Car,,BIKE 70675,Customer
+80559916,8/2/19 10:59,8/2/19 11:03,70136,223,666,Sara's Car,1061,33rd St & Penn Ave,Customer
+80569806,8/2/19 12:05,8/2/19 13:09,70136,3864,666,Sara's Car,1061,33rd St & Penn Ave,Subscriber
+80569806,8/2/19 12:07,8/2/19 13:20,70136,3864,666,Sara's Car,1061,33rd St & Penn Ave,Subscriber
+80569806,8/3/19 12:05,8/3/19 13:09,70136,3864,666,Sara's Car,1061,33rd St & Penn Ave,Subscriber
+
+
+
+
+
+
+df_sort_month = df_all.sort_values(['Bikeid','Startime'], ascending = True)
+df_sort_month['pre_id'] = df_sort_month['To station id'].shift(1)
+df_sort_month['pre_bike'] = df_sort_month['Bikeid'].shift(1)
+df_new_month = df_sort_month.loc[(df_sort_month['From station id'] != df_sort_month['pre_id']) & (df_sort_month['Bikeid'] == df_sort_month['pre_bike'])]
+df_rebal_month = df_new_month.groupby(['From station id', 'month'])['From station id'].count().rename('rebalCNT').reset_index()
